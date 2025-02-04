@@ -4,12 +4,23 @@ import { StatusBar } from "expo-status-bar";
 import AppGradient from "@/components/AppGradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors, { primaryColor } from "@/constants/Colors";
-import { useRouter } from "expo-router";
-import { Button, useTheme } from "react-native-paper";
+import { Redirect, useRouter } from "expo-router";
+import { ActivityIndicator, Button, useTheme } from "react-native-paper";
+import { useAuth } from "@/providers/AuthProvider";
 
 const index = () => {
+  const { session, loading } = useAuth();
+
   const router = useRouter();
   const theme = useTheme();
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  if (session) {
+    return <Redirect href={"/(home)"} />;
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -40,9 +51,7 @@ const index = () => {
                   onPress={() => router.push("/sign-up")}
                   style={{ borderColor: theme.colors.primary }}
                 >
-                  <Text style={{ color: 'white' }}>
-                  Đăng ký
-                  </Text>
+                  <Text style={{ color: "white" }}>Đăng ký</Text>
                 </Button>
               </View>
             </View>

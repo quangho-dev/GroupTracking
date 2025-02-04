@@ -1,3 +1,4 @@
+import { Provider } from "@supabase/auth-js/src/lib/types";
 import { supabase } from "@/lib/supabase";
 import { Session } from "@supabase/supabase-js";
 import {
@@ -23,10 +24,12 @@ const AuthContext = createContext<AuthData>({
 export default function AuthProvider({ children }: PropsWithChildren) {
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSession = async () => {
+      setLoading(true);
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -40,6 +43,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
           .select("*")
           .eq("id", session.user.id)
           .single();
+
         setProfile(data || null);
       }
 
@@ -50,6 +54,10 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+
+    console.log("🚀 ~ AuthProvider ~ session:", session)
+    console.log("🚀 ~ AuthProvider ~ profile:", profile)
+    console.log("🚀 ~ AuthProvider ~ loading:", loading)
   }, []);
 
   return (

@@ -10,7 +10,7 @@ import {
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { supabase } from "@/lib/supabase";
 import { Toast } from "toastify-react-native";
 
@@ -63,6 +63,8 @@ const SignUp = () => {
         email: data.email,
         password: data.password,
       });
+
+      router.replace("/(home)");
 
       Toast.success("Tạo tài khoản thành công");
     } catch (error) {

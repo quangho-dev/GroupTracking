@@ -9,8 +9,13 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
-
+import {
+  PaperProvider,
+  MD3LightTheme as DefaultPaperTheme,
+} from "react-native-paper";
 import { useColorScheme } from "@/components/useColorScheme";
+import lightTheme from "@/constants/lightTheme";
+import ToastManager from "toastify-react-native";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -24,6 +29,11 @@ export const unstable_settings = {
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const theme = {
+  ...DefaultPaperTheme,
+  colors: lightTheme.colors, // Copy it from the color codes scheme and then use it here
+};
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -53,12 +63,17 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-      </Stack>
-    </ThemeProvider>
+      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+        <PaperProvider theme={theme}>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
+
+          <ToastManager />
+        </PaperProvider>
+      </ThemeProvider>
   );
 }

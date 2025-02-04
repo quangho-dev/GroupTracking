@@ -4,9 +4,13 @@ import { StatusBar } from "expo-status-bar";
 import AppGradient from "@/components/AppGradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Colors, { primaryColor } from "@/constants/Colors";
-import CustomButton from "@/components/CustomButton";
+import { useRouter } from "expo-router";
+import { Button, useTheme } from "react-native-paper";
 
 const index = () => {
+  const router = useRouter();
+  const theme = useTheme();
+
   return (
     <View style={{ flex: 1 }}>
       <ImageBackground
@@ -25,21 +29,21 @@ const index = () => {
               </Text>
 
               <View style={styles.buttonsWrapper}>
-                <CustomButton
-                  title="Đăng nhập"
-                  onPress={() => {
-                    console.log("clicked");
-                  }}
-                  containerStyles={styles.loginButton}
-                />
-
-                <CustomButton
-                  title="Đăng ký"
-                  onPress={() => {
-                    console.log("clicked");
-                  }}
-                  containerStyles={styles.signupButton}
-                />
+                <Button
+                  mode="contained"
+                  onPress={() => router.push("/sign-in")}
+                >
+                  Đăng nhập
+                </Button>
+                <Button
+                  mode="outlined"
+                  onPress={() => router.push("/sign-up")}
+                  style={{ borderColor: theme.colors.primary }}
+                >
+                  <Text style={{ color: 'white' }}>
+                  Đăng ký
+                  </Text>
+                </Button>
               </View>
             </View>
             <StatusBar style="light" translucent={false} />
